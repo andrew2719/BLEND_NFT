@@ -1,0 +1,12 @@
+dotenv: .env
+# for env vars to get the brownie know 
+dependencies:
+  - OpenZeppelin/openzeppelin-contracts@5.0.2
+  # - smartcontractkit/chainlink-brownie-contracts@0.8.0
+compiler:
+  solc:
+    remappings:
+      - '@openzeppelin=OpenZeppelin/openzeppelin-contracts@5.0.2'
+      # - '@chainlink=smartcontractkit/chainlink-brownie-contracts@0.8.0'
+wallets:
+  from_key: ${PRIVATE_KEY}
