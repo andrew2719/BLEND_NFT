@@ -19,7 +19,7 @@ class BLEND:
             return True
         except:
             return False
-        
+            
 class IPFSHandler:
     def get_ipfs_data(self, ipfs_uri):
         try:
