@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <title>Home</title>
+    <style>
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #load-text {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -40%);
+            font-size: 24px;
+        }
+
+        .loader {
+            border: 6px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 6px solid #3498db;
+            width: 60px;
+            height: 60px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <h1 id="load-text">Loading your Achievements form Blockchain</h1>
+        <br>
+        <div class="loader"></div>
+    </div>
+    <h1>Welcome, {{ user.first_name }} {{ user.last_name }}</h1>
+    <a href="{% url 'logout' %}">Logout</a>
+    <br>
+    <div id="cards" class="cards">
+    </div>
+    <script>
+        var user_wallet_id = "{{ user.wallet_id }}";
+        var url = `http://192.168.194.77:5000/getTokenDetails/${user_wallet_id}`;
+        console.log(url);
+        fetch(url).then(response => response.json())
+        .then(data => {
+            let cards = document.getElementById('cards');
+            let loading = document.getElementById('loading');
+            loading.style.display = 'none'; 
+            data.forEach(item => {
+                let attributes = item[2];
+                let template = `
+                    <div class="card" style="margin:20px;">
+                        <div class="image">
+                            <img src="${attributes.image}" alt="NFT Image">
+                        </div>
+                        <div class="details">
+                            <div class="heading">
+                                <h2>${attributes.name}</h2>
+                            </div>
+                            <div class="sub-heading">
+                                <p>by ${item[1]}</p>
+                            </div>
+                            <div class="description">
+                                <p>
+                                    ${attributes.description}
+                                </p>
+                            </div>
+                        </div> 
+                    </div>
+                `;
+                cards.innerHTML += template;
+            });
+        }).catch(error => {
+            console.error('Error fetching data:', error);
+            document.getElementById('loading').style.display = 'none'; // Also hide loading on error
+        });
+    </script>
+</body>
+</html>

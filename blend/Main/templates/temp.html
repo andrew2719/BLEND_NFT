@@ -1,0 +1,38 @@
+   <script>
+        let cards = document.getElementById('cards'); 
+        let template = `
+        <div class="card">
+            <div class="image">
+                <img src="" alt="NFT Image">  
+            </div>
+            <div class="details">
+                <div class="heading">
+                    <h2>\${name}</h2>
+                </div>
+                <div class="sub-heading">
+                    <p>by \${by}</p>
+                </div>
+                <div class="description">
+                    <p>
+                        \${description}
+                    </p>
+                </div>
+            </div> 
+            <div class="price">
+                <p>\${price} ETH</p>
+            </div>
+        </div>
+        `;
+        fetch(`/test_api/`).then(response => response.json())
+        .then(data => {
+            data.data.forEach(element => {
+                let card = template.replace('\${name}', element.name)
+                .replace('\${by}', element.by)
+                .replace('\${description}', element.description)
+                .replace('\${price}', element.price);
+                cards.innerHTML += card;
+
+                
+            });
+        });
+    </script>
